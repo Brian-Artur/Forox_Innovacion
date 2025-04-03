@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/2025-04/03.04.Ju.md",
+                "file": "Clase/JS.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03.04.Ju"
+              "title": "JS"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200
   },
   "right": {
     "id": "11fc2b90c6d06674",
@@ -172,8 +172,18 @@
   },
   "active": "56e4aa6a7a871db5",
   "lastOpenFiles": [
+    "Clase/Accesibilidad y Usabilidad.md",
+    "Clase/JS.md",
+    "Clase/Etiquetas Semánticas.md",
+    "Drawer/Styles.md",
+    "Drawer/Python.md",
+    "Drawer/HTML & CSS.md",
+    "Drawer/Git.md",
+    "Drawer/Angular.md",
+    "Drawer/Consejos JC.md",
+    "pdf/UT5a - Introduccion al lenguaje unificado UML-Diagrama de Clases.pdf",
+    "Clase/2025-04/01.04.Ma.md",
     "Clase/2025-04/02.04.Mi.md",
-    "Clase/2025-04/03.04.Ju.md",
-    "Clase/2025-04/01.04.Ma.md"
+    "Clase/2025-04/03.04.Ju.md"
   ]
 }
