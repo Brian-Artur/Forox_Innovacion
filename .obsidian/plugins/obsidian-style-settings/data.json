@@ -1,0 +1,22 @@
+{
+  "things-style@@active-line": true,
+  "things-style@@fancy-highlight": true,
+  "things-style@@h1-size": "1.5em",
+  "things-style@@h1-color": "#C68750",
+  "things-style@@h2-size": "1.4em",
+  "things-style@@h2-color": "#89A36A",
+  "things-style@@h3-size": "1.3em",
+  "things-style@@h3-color": "#77ADC5",
+  "things-style@@h4-size": "1.2em",
+  "things-style@@h3-weight": 700,
+  "things-style@@h4-weight": 700,
+  "things-style@@h4-color": "#876BDD",
+  "things-style@@strong-color": "#8375C7",
+  "things-style@@em-color": "#D2AD63",
+  "things-style@@quote-color": "#3EB4BF",
+  "things-style@@tag-background-color-d": "#691D57",
+  "things-style@@text-highlight-bg-d": "#60AA62",
+  "things-style@@code-color-d": "#76CFA1",
+  "things-style@@code-normal": "#76D39B",
+  "things-style@@text-highlight-bg-l": "#5CA355"
+}
