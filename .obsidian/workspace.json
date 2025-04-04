@@ -13,12 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/JS.md",
+                "file": "Clase/2025-04/04.04.Vi.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "JS"
+              "title": "04.04.Vi"
+            }
+          },
+          {
+            "id": "0255efa4f3888e7b",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2025-04-04 13.59.09.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2025-04-04 13.59.09.excalidraw"
             }
           }
         ]
@@ -44,7 +56,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Explorador de archivos"
+              "title": "Files"
             }
           },
           {
@@ -78,7 +90,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 200,
+    "collapsed": true
   },
   "right": {
     "id": "11fc2b90c6d06674",
@@ -160,20 +173,25 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Abrir selector rápido": false,
-      "graph:Abrir vista gráfica": false,
-      "canvas:Crear nuevo lienzo": false,
-      "daily-notes:Abrir la nota de hoy": false,
-      "templates:Insertar plantilla": false,
-      "command-palette:Abrir paleta de comandos": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
       "handwritten-notes:Create empty handwritten note": false,
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "56e4aa6a7a871db5",
   "lastOpenFiles": [
-    "Clase/Accesibilidad y Usabilidad.md",
+    "Excalidraw/Drawing 2025-04-04 13.59.09.excalidraw.md",
+    "Clase/2025-04/04.04.Vi.md",
+    "Excalidraw/Drawing 2025-04-04 10.07.00.excalidraw.md",
+    "Clase/2025-04/03.04.Ju.md",
+    "Clase/2025-04/02.04.Mi.md",
     "Clase/JS.md",
+    "Clase/Accesibilidad y Usabilidad.md",
     "Clase/Etiquetas Semánticas.md",
     "Drawer/Styles.md",
     "Drawer/Python.md",
@@ -182,8 +200,6 @@
     "Drawer/Angular.md",
     "Drawer/Consejos JC.md",
     "pdf/UT5a - Introduccion al lenguaje unificado UML-Diagrama de Clases.pdf",
-    "Clase/2025-04/01.04.Ma.md",
-    "Clase/2025-04/02.04.Mi.md",
-    "Clase/2025-04/03.04.Ju.md"
+    "Clase/2025-04/01.04.Ma.md"
   ]
 }
