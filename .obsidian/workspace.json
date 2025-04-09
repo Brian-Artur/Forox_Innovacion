@@ -13,24 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/2025-04/08.03.Ma.md",
+                "file": "Clase/2025-04/09.03.Mi.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "08.03.Ma"
+              "title": "09.03.Mi"
             }
           },
           {
-            "id": "863a432dd90e63d0",
+            "id": "ebba8639db020d70",
             "type": "leaf",
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "Excalidraw/Drawing 2025-04-08 21.09.03.excalidraw.md"
+                "file": "Excalidraw/Drawing 2025-04-09 12.57.13.excalidraw.md"
               },
               "icon": "excalidraw-icon",
-              "title": "Drawing 2025-04-08 21.09.03.excalidraw"
+              "title": "Drawing 2025-04-09 12.57.13.excalidraw"
             }
           }
         ]
@@ -56,7 +56,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Explorador de archivos"
+              "title": "Files"
             }
           },
           {
@@ -90,8 +90,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "87137d9fcc14686d",
@@ -170,20 +169,34 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Abrir selector rápido": false,
-      "graph:Abrir vista gráfica": false,
-      "canvas:Crear nuevo lienzo": false,
-      "daily-notes:Abrir la nota de hoy": false,
-      "templates:Insertar plantilla": false,
-      "command-palette:Abrir paleta de comandos": false,
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
       "handwritten-notes:Create empty handwritten note": false,
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "94723ca800258646",
   "lastOpenFiles": [
-    "Excalidraw/Drawing 2025-04-08 21.09.03.excalidraw.md",
+    "Pasted image 20250409141118.png",
+    "Pasted image 20250409134632.png",
+    "Excalidraw/Drawing 2025-04-09 12.57.13.excalidraw.md",
+    "Clase/2025-04/09.03.Mi.md",
+    "Excalidraw/Drawing 2025-04-09 13.02.34.excalidraw.md",
+    "Excalidraw/Drawing 2025-04-09 12.14.21.excalidraw.md",
+    "Pasted Image 20250409121436_771.png",
+    "Excalidraw/Drawing 2025-04-09 11.19.40.excalidraw.md",
+    "Pasted Image 20250409112227_004.png",
+    "Pasted Image 20250409112127_018.png",
+    "Pasted Image 20250409112012_215.png",
+    "Excalidraw/Drawing 2025-04-09 10.51.51.excalidraw.md",
+    "Excalidraw/Drawing 2025-04-09 10.07.01.excalidraw.md",
+    "Excalidraw/Drawing 2025-04-09 09.27.50.excalidraw.md",
     "Clase/2025-04/08.03.Ma.md",
+    "Excalidraw/Drawing 2025-04-08 21.09.03.excalidraw.md",
     "Pasted image 20250408210846.png",
     "Pasted image 20250408200035.png"
   ]
