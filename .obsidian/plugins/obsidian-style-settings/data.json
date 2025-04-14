@@ -18,5 +18,7 @@
   "things-style@@text-highlight-bg-d": "#60AA62",
   "things-style@@code-color-d": "#76CFA1",
   "things-style@@code-normal": "#76D39B",
-  "things-style@@text-highlight-bg-l": "#5CA355"
+  "things-style@@text-highlight-bg-l": "#5CA355",
+  "things-style@@h2-underline": false,
+  "things-style@@h2-weight": 700
 }

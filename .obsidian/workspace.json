@@ -13,12 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/2025-04/13.04.Do.md",
+                "file": "Clase/2025-04/14.04.Lu.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "13.04.Do"
+              "title": "14.04.Lu"
+            }
+          },
+          {
+            "id": "e406ed72d7d4f2c3",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Excalidraw/Drawing 2025-04-14 13.19.44.excalidraw.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Drawing 2025-04-14 13.19.44.excalidraw"
             }
           }
         ]
@@ -78,8 +90,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "87137d9fcc14686d",
@@ -170,9 +181,19 @@
   },
   "active": "94723ca800258646",
   "lastOpenFiles": [
+    "Excalidraw/Drawing 2025-04-14 13.19.44.excalidraw.md",
+    "Pasted Image 20250414132015_813.png",
+    "Clase/2025-04/14.04.Lu.md",
+    "Excalidraw/Drawing 2025-04-14 13.04.34.excalidraw.md",
+    "Excalidraw/Drawing 2025-04-14 13.12.26.excalidraw.md",
+    "Pasted Image 20250414131258_391.png",
+    "Pasted Image 20250414130520_133.png",
+    "Excalidraw/Drawing 2025-04-14 11.00.15.excalidraw.md",
+    "Excalidraw/Drawing 2025-04-14 10.57.02.excalidraw.md",
+    "Pasted Image 20250414105735_370.png",
+    "Clase/2025-04/13.04.Do.md",
     "Excalidraw/Drawing 2025-04-14 07.44.18.excalidraw.md",
     "Excalidraw/Drawing 2025-04-14 07.44.17.excalidraw.md",
-    "Clase/2025-04/13.04.Do.md",
     "Pasted image 20250414073917.png",
     "Excalidraw/Drawing 2025-04-13 12.45.37.excalidraw.md",
     "pdf/IFCD0210-MF0492_3-UF1844-Desarrollo-de-aplicaciones-web-en-el-entorno-servidor-Rafael-Luis-Granados-LaPaz_.pdf",
@@ -184,10 +205,6 @@
     "Pasted Image 20250413103407_449.png",
     "Excalidraw/Drawing 2025-04-13 10.16.02.excalidraw.md",
     "Pasted Image 20250413102144_269.png",
-    "Pasted Image 20250413101607_002.png",
-    "Pasted image 20250413094150.png",
-    "Pasted Image 20250411105802_142.png",
-    "Pasted Image 20250411123706_978.png",
     "Clase/2025-04/11.04.Vi.md",
     "Excalidraw/Drawing 2025-04-12 20.03.06.excalidraw.md",
     "Excalidraw/Drawing 2025-04-11 14.28.37.excalidraw.md",
@@ -199,13 +216,6 @@
     "Excalidraw/Drawing 2025-04-11 10.57.41.excalidraw.md",
     "Excalidraw/Drawing 2025-04-10 14.38.39.excalidraw.md",
     "Clase/2025-04/10.04.Ju.md",
-    "Excalidraw/Drawing 2025-04-10 14.00.33.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-10 13.24.33.excalidraw.md",
-    "Clase/2025-04/09.03.Mi.md",
-    "Excalidraw/Drawing 2025-04-10 12.51.29.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-10 12.27.11.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-10 10.44.34.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-10 10.30.13.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-10 09.53.45.excalidraw.md"
+    "Excalidraw/Drawing 2025-04-10 14.00.33.excalidraw.md"
   ]
 }
