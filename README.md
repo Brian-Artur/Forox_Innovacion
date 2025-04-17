@@ -1,3 +1,3 @@
 # Título
 Hola, soy un texto.
-[hola hola](16.04.Mi)
+[hola hola](./clase/2025-04/02.04.Mi)
