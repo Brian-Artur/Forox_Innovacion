@@ -37,27 +37,79 @@ typeof SuppressedError === "function" ? SuppressedError : function (error, suppr
     return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
 };
 
-class PDFCreatorModal extends obsidian.Modal {
-    constructor(app, manifest, favoriteTemplate, templatesFolder, onSubmit) {
+class ChooseDestModals extends obsidian.SuggestModal {
+    constructor(app, onSubmit) {
         super(app);
+        this.onSubmit = onSubmit;
+    }
+    getSuggestions(query) {
+        return this.app.vault
+            .getAllFolders()
+            .filter((folder) => folder.path.toLowerCase().includes(query));
+    }
+    renderSuggestion(value, el) {
+        el.createEl("div", { text: value.name });
+        el.createEl("small", { text: value.path });
+    }
+    onChooseSuggestion(item, _evt) {
+        this.onSubmit(item);
+        this.close();
+    }
+}
+class ChooseDestinationSearch extends obsidian.AbstractInputSuggest {
+    constructor(inputEl, app, onSubmit) {
+        super(app, inputEl);
+        this.inputEl = inputEl;
+        this.onSubmit = onSubmit;
+    }
+    renderSuggestion(value, el) {
+        el.setText(value);
+    }
+    getSuggestions(query) {
+        const sugg = this.app.vault
+            .getAllFolders()
+            .filter((folder) => {
+            return folder.path.toLowerCase().contains(query.toLowerCase());
+        })
+            .map((folder) => folder.path);
+        if (sugg.length === 0)
+            return [query];
+        return sugg;
+    }
+    selectSuggestion(value, _evt) {
+        this.inputEl.value = value;
+        this.onSubmit(value);
+        this.inputEl.focus();
+        this.inputEl.trigger("input");
+        this.close();
+    }
+}
+
+class PDFCreatorModal extends obsidian.Modal {
+    constructor(plugin, templatesFolder, onSubmit, chooseDest, inEditor) {
+        super(plugin.app);
         this.result = {
             name: "New note",
             template: "blank.pdf",
         };
+        this.chooseDest = false;
+        this.inEditor = false;
         this.onSubmitCallback = onSubmit;
-        this.manifest = manifest;
-        this.favoriteTemplate = favoriteTemplate;
+        this.manifest = plugin.manifest;
+        this.favoriteTemplate = plugin.settings.favoriteTemplate;
         this.templatesFolder = templatesFolder;
+        this.chooseDest = chooseDest;
+        this.plugin = plugin;
+        this.inEditor = inEditor;
     }
     onOpen() {
         return __awaiter(this, void 0, void 0, function* () {
-            let { contentEl } = this;
-            contentEl.createEl("h1", { text: "Create new note from template" });
-            // NAME
+            const { contentEl } = this;
+            this.setTitle("Create new note from template");
             new obsidian.Setting(contentEl).setName("Name").addText((text) => {
-                text.setValue(this.result["name"]);
+                text.setValue(this.result.name);
                 text.onChange((value) => {
-                    this.result["name"] = value;
+                    this.result.name = value;
                 });
                 // on enter, submit the modal
                 text.inputEl.addEventListener("keydown", (e) => {
@@ -84,420 +136,56 @@ class PDFCreatorModal extends obsidian.Modal {
                 }
                 // default value is the favorite template
                 dropDown.setValue(this.favoriteTemplate);
-                this.result["template"] = this.favoriteTemplate;
+                this.result.template = this.favoriteTemplate;
                 dropDown.onChange((value) => {
-                    this.result["template"] = value;
+                    this.result.template = value;
                 });
             }));
+            // ONLY IF CHOOSEDEST IS TRUE
+            if (this.chooseDest) {
+                this.result.path = this.inEditor
+                    ? yield this.plugin.getDestFolder()
+                    : this.plugin.settings.defaultPath;
+                let search;
+                new obsidian.Setting(contentEl)
+                    .setName("Destination")
+                    .addSearch((cb) => {
+                    cb.setPlaceholder("Choose a folder");
+                    cb.setValue(this.result.path);
+                    new ChooseDestinationSearch(cb.inputEl, this.app, (value) => {
+                        this.result.path = value;
+                    });
+                    cb.clearButtonEl.onclick = (_e) => {
+                        this.result.path = undefined;
+                    };
+                    cb.onChange((value) => {
+                        this.result.path = value;
+                    });
+                })
+                    .addExtraButton((btn) => btn
+                    .setIcon("refresh-ccw")
+                    .setTooltip("Set to default")
+                    .onClick(() => __awaiter(this, void 0, void 0, function* () {
+                    this.result.path = this.plugin.settings.defaultPath;
+                    search.setValue(this.result.path);
+                })));
+            }
             // CLOSE BUTTON
             new obsidian.Setting(contentEl).addButton((btn) => btn
                 .setButtonText("Submit")
                 .setCta()
                 .onClick(() => {
                 this.close();
+                this.result.path = !this.result.path || this.result.path.trim().length === 0
+                    ? undefined
+                    : this.result.path;
                 this.onSubmitCallback(this.result);
             }));
         });
     }
     onClose() {
-        let { contentEl } = this;
+        const { contentEl } = this;
         contentEl.empty();
-    }
-}
-
-const DEFAULT_TEMPLATE_DIR = "/templates/";
-const DEFAULT_TEMPLATE = "blank.pdf";
-const DEFAULT_ASSET_PATH = "/handwritten-notes/";
-const DEFAULT_SETTINGS = {
-    defaultPath: DEFAULT_ASSET_PATH,
-    assetUrl: "",
-    useRelativePaths: false,
-    showWelcomeModal: true,
-    collapseEmbeds: false,
-    favoriteTemplate: DEFAULT_TEMPLATE,
-    templatesAtCustom: false,
-    templatesPath: DEFAULT_TEMPLATE_DIR,
-};
-
-/**
- * Loads the PDF template from the specified path.
- *
- * @param {App} app - The obsidian app instance.
- * @param {string} path - The template file to be loaded.
- * @return {Promise<any>} The loaded template in binary format.
- */
-function loadPdfTemplate(app, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        return app.vault.adapter.readBinary(obsidian.normalizePath(path));
-    });
-}
-/**
- * Creates a binary file in the specified path.
- *
- * @param {App} app - The obsidian app instance.
- * @param {any} template - The template to be written to the file.
- * @param {string} path - The path where the file will be created.
- * @throws Will throw an error if the file already exists or on creation failure.
- */
-function createBinaryFile(app, template, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield app.vault.createBinary(path, template);
-        }
-        catch (e) {
-            new obsidian.Notice(e.message.includes("already exists")
-                ? "File already exists!"
-                : "Error creating file! Note: " + e.message);
-            console.log(e);
-        }
-    });
-}
-/**
- * Opens a file in the obsidian app.
- *
- * @param {App} app - The obsidian app instance.
- * @param {string} path - The path of the file to be opened.
- */
-function openCreatedFile(app, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const leaf = app.workspace.getLeaf(false);
-        const file = app.vault.getAbstractFileByPath(path);
-        if (file instanceof obsidian.TFile) {
-            yield leaf.openFile(file);
-        }
-    });
-}
-/**
- * Appends an 'Annotate' button to the specified toolbar.
- *
- * @param {HTMLElement} toolbar - The toolbar where the button will be appended.
- * @param {App} app - The obsidian app instance.
- * @param {() => Promise<void>} onClick - The async function to be executed when the button is clicked.
- */
-function appendAnnotateButton(toolbar, onClick) {
-    // Check if the button already exists before appending
-    let matchingChild = toolbar.querySelector(".pdf-annotate-button");
-    if (matchingChild)
-        return;
-    // Check if the button already exists before appending
-    const button = new obsidian.ButtonComponent(toolbar).setIcon("pen-tool");
-    // give it a unique id so we can find it later
-    button.setTooltip("Annotate");
-    // button.buttonEl.classList.add("pdf-annotate-button");
-    button.setClass("pdf-annotate-button");
-    button.setClass("clickable-icon");
-    // Handle the async onClick function
-    button.onClick(() => __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield onClick();
-        }
-        catch (error) {
-            console.error("Error handling async onClick:", error);
-        }
-    }));
-}
-/**
- * Initializes the templates folder if it doesn't exist.
- *
- * @param {Plugin} plugin - The obsidian plugin instance.
- * @throws Will throw an error if there's an issue in creating the folder.
- */
-function initTemplatesFolder(plugin) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // @ts-ignore
-        const templatesFolder = yield getTemplatesFolder(plugin);
-        try {
-            yield plugin.app.vault.createFolder(templatesFolder);
-        }
-        catch (e) {
-            // Ignore error if folder already exists
-        }
-        const defaultTemplatePath = obsidian.normalizePath(templatesFolder + "/blank.pdf");
-        if (yield fileExists(plugin.app, defaultTemplatePath))
-            return;
-        // Download default template if it doesn't exist
-        const TEMPLATE_URL = "https://mag.wcoomd.org/uploads/2018/05/blank.pdf";
-        yield downloadFile(plugin.app, TEMPLATE_URL, defaultTemplatePath);
-        // console.log("Downloaded template to " + defaultTemplatePath);
-    });
-}
-/**
- * Downloads a file from a URL and saves it to the specified path.
- *
- * @param {App} app - The obsidian app instance.
- * @param {string} url - The URL of the file to be downloaded.
- * @param {string} path - The path where the file will be saved.
- * @throws Will throw an error if there's an issue in fetching the file.
- */
-function downloadFile(app, url, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield obsidian.requestUrl({
-                url: url,
-                method: "GET",
-                contentType: "arraybuffer",
-            });
-            const body = yield response.arrayBuffer;
-            yield app.vault.createBinary(path, body);
-        }
-        catch (err) {
-            console.error(err);
-            new obsidian.Notice("Error fetching file!");
-        }
-    });
-}
-/** Checks if a file exists in the vault.
- * @param {App} app - The obsidian app instance.
- * @param {string} path - The path of the file to be checked.
- * @return {boolean} True if the file exists, false otherwise.
- *
- * @throws It will throw an error if the file exists
- * @brief Use vault.adapter.exists to determine if the file exists. This works for all files, whether in or out of the vault.
- */
-function fileExists(app, path) {
-    return __awaiter(this, void 0, void 0, function* () {
-        console.log("Checking if file exists: " + path);
-        try {
-            const exists = yield app.vault.adapter.exists(path);
-            console.log("File exists: " + exists);
-            return exists;
-        }
-        catch (err) {
-            console.error("Error checking file existance");
-            return false;
-        }
-    });
-}
-/** Gets the path of the template folder based on the current settings.
- * @param plugin The obsidian plugin instance.
- * @return {string} The path of the template folder.
- * @brief If the templates are stored in the custom folder, return the custom folder path. Otherwise, return the default folder path.
- */
-function getTemplatesFolder(plugin) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const settings = plugin.settings;
-        return settings.templatesAtCustom
-            ? obsidian.normalizePath(settings.templatesPath)
-            : obsidian.normalizePath(plugin.manifest.dir + DEFAULT_TEMPLATE_DIR);
-    });
-}
-
-class NotePDFSettingsTab extends obsidian.PluginSettingTab {
-    constructor(app, plugin) {
-        super(app, plugin);
-        this.plugin = plugin;
-    }
-    display() {
-        const { containerEl: modal } = this;
-        modal.empty();
-        // GENERAL SETTINGS
-        modal.createEl("h2", {
-            text: "General Settings",
-        });
-        this.CollapseEmbedsToggle();
-        // Generate new note
-        modal.createEl("h2", {
-            text: "Create new note",
-        });
-        this.createRelativePathToggle();
-        this.createDefaultPathTextInput();
-        // Settings heading
-        // TEMPLATES
-        this.createTemplatesSection();
-        this.createTemplateFolderPath();
-        this.createSettingWithOptions();
-    }
-    CollapseEmbedsToggle() {
-        new obsidian.Setting(this.containerEl)
-            .setName("Collapse embeds")
-            .setDesc("Collapse embeds by default to save vertical space.")
-            .addToggle((toggle) => toggle
-            .setValue(this.plugin.settings.collapseEmbeds)
-            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
-            this.plugin.settings.collapseEmbeds = value;
-            yield this.plugin.saveSettings();
-        })));
-    }
-    createRelativePathToggle() {
-        new obsidian.Setting(this.containerEl)
-            .setName("Use relative path")
-            .setDesc("Use relative path for the template path.")
-            .addToggle((toggle) => toggle
-            .setValue(this.plugin.settings.useRelativePaths)
-            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
-            this.plugin.settings.useRelativePaths = value;
-            yield this.plugin.saveSettings();
-        })));
-    }
-    createDefaultPathTextInput() {
-        new obsidian.Setting(this.containerEl)
-            .setName("Default Path for new notes")
-            .setDesc("Path to be used if relative path is disabled.")
-            .addText((text) => text
-            .setPlaceholder(DEFAULT_ASSET_PATH)
-            .setValue(this.plugin.settings.defaultPath)
-            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
-            this.plugin.settings.defaultPath = value;
-            yield this.plugin.saveSettings();
-        })));
-    }
-    createTemplatesSection() {
-        return __awaiter(this, void 0, void 0, function* () {
-            // add a div
-            const titleEl = this.containerEl.createDiv();
-            titleEl.innerText = "Templates";
-            titleEl.addClass("setting-item-heading");
-            titleEl.addClass("setting-item");
-            if (obsidian.Platform.isDesktop) {
-                this.createFolderButton(titleEl);
-            }
-            const pluginFolder = yield getTemplatesFolder(this.plugin);
-            obsidian.MarkdownRenderer.render(this.app, `You can use **any** PDF as a template for the notes. Just add it to the templates folder and it will appear here. 
-      \`${pluginFolder}\``, this.containerEl, "", this.plugin);
-        });
-    }
-    createTemplateFolderPath() {
-        // Whether the templates should be stored in a custom folder
-        new obsidian.Setting(this.containerEl)
-            .setName("Store templates in a custom folder")
-            .setDesc("Store the templates in a custom folder outside the plugin path. (May resolve issues with syncing)")
-            .addToggle((toggle) => toggle
-            .setValue(this.plugin.settings.templatesAtCustom)
-            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
-            !value // If the value is false, set the path to the default path
-                ? (this.plugin.settings.templatesPath = DEFAULT_TEMPLATE_DIR)
-                : null;
-            this.plugin.settings.templatesAtCustom = value;
-            yield this.plugin.saveSettings();
-            yield initTemplatesFolder(this.plugin);
-            yield this.display();
-        })));
-        if (!this.plugin.settings.templatesAtCustom)
-            return;
-        // Folder relative to the plugin
-        new obsidian.Setting(this.containerEl)
-            .setName("Templates folder")
-            .setDesc("Path to the templates folder.")
-            .addText((text) => text
-            .setPlaceholder(DEFAULT_TEMPLATE_DIR)
-            .setValue(this.plugin.settings.templatesPath)
-            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
-            this.plugin.settings.templatesPath = value;
-            yield this.plugin.saveSettings();
-        })));
-        // Dividing line
-    }
-    createFolderButton(parentEl) {
-        // div for the buttons
-        const buttonContainer = parentEl.createDiv();
-        buttonContainer.addClass("setting-item-control");
-        // Reload button
-        const reloadButton = new obsidian.ButtonComponent(buttonContainer)
-            .setIcon("sync")
-            .setClass("clickable-icon")
-            .setClass("setting-editor-extra-setting-button")
-            .setTooltip("Reload templates");
-        reloadButton.onClick(() => {
-            initTemplatesFolder(this.plugin); // Reload default template just in case
-            this.display();
-        });
-        const folderButton = new obsidian.ButtonComponent(buttonContainer)
-            .setIcon("folder")
-            .setClass("clickable-icon")
-            // .setClass("settings-folder-button")
-            .setClass("setting-editor-extra-setting-button")
-            .setTooltip("Open templates folder in the explorer");
-        folderButton.onClick(() => __awaiter(this, void 0, void 0, function* () {
-            this.app.showInFolder(obsidian.normalizePath((yield getTemplatesFolder(this.plugin)) + "/" + DEFAULT_TEMPLATE));
-        }));
-    }
-    createSettingWithOptions() {
-        return __awaiter(this, void 0, void 0, function* () {
-            const { containerEl } = this;
-            obsidian.MarkdownRenderer.render(this.app, `### Available Templates`, containerEl, "", this.plugin);
-            const scrollContainer = containerEl.createDiv();
-            scrollContainer.addClass("settings-scroll-container");
-            // Show also templates in the templates folder
-            const templatePath = yield getTemplatesFolder(this.plugin);
-            const templates = yield this.app.vault.adapter.list(templatePath);
-            // iterate over the templates and show them
-            for (const filePath of templates.files) {
-                const fileName = filePath.split("/").pop();
-                // fileName without extension and capitalized
-                const title = fileName === null || fileName === void 0 ? void 0 : fileName.split(".")[0].replace(/-/g, " ").replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
-                const setting = new obsidian.Setting(scrollContainer)
-                    .setName(title)
-                    .setDesc(fileName);
-                this.favoriteButton(setting, fileName);
-                // Delete button and lock for default template
-                this.deleteButton(setting, filePath, fileName);
-            }
-        });
-    }
-    deleteButton(setting, filePath, fileName) {
-        // Default file cant be deleted
-        if (fileName === DEFAULT_TEMPLATE) {
-            // Add a lock icon
-            setting.addButton((button) => button
-                .setIcon("lock")
-                .setTooltip("Default template")
-                .setClass("settings-button")
-                .setClass("settings-folder-button"));
-        }
-        else {
-            setting.addButton((button) => button
-                .setIcon("trash")
-                .setTooltip("Delete template")
-                .setClass("settings-button")
-                .onClick(() => __awaiter(this, void 0, void 0, function* () {
-                // Check if the template is the favorite template
-                if (this.isDefaultTemplate(fileName))
-                    this.plugin.settings.favoriteTemplate = DEFAULT_TEMPLATE;
-                try {
-                    yield this.app.vault.adapter.remove(filePath);
-                    console.log(`Deleted asset: ${filePath}`);
-                    this.display();
-                }
-                catch (err) {
-                    console.error(`Error deleting asset ${filePath}:`, err);
-                }
-            })));
-        }
-    }
-    isDefaultTemplate(fileName) {
-        return fileName === this.plugin.settings.favoriteTemplate;
-    }
-    favoriteButton(setting, fileName) {
-        setting.addButton((button) => button
-            .setIcon(this.plugin.settings.favoriteTemplate === fileName
-            ? "star"
-            : "crossed-star")
-            .setTooltip("Favorite template")
-            .setClass("settings-button")
-            .onClick(() => {
-            // if the template is not favorite, make it favorite else do nothing
-            if (this.isDefaultTemplate(fileName))
-                return;
-            this.plugin.settings.favoriteTemplate = fileName;
-            this.plugin.saveSettings();
-            // refresh the settings tab
-            this.display();
-        }));
-    }
-}
-
-class FileExistsError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "FileExistsError";
-        new obsidian.Notice(message);
-    }
-}
-class TemplateNotFoundError extends Error {
-    constructor(message) {
-        super(message);
-        this.name = "TemplateNotFoundError";
-        new obsidian.Notice(message);
     }
 }
 
@@ -621,82 +309,522 @@ class WelcomeModal extends obsidian.Modal {
 		`, this.instructionsContainer, "", this.plugin);
     }
     renderMacInstructions() {
-        obsidian.MarkdownRenderer.render(this.app, `Instructions not yet finished for your platform, please PR if you own the device`, this.instructionsContainer, "", this.plugin);
+        return __awaiter(this, void 0, void 0, function* () {
+            yield obsidian.MarkdownRenderer.render(this.app, "Instructions not yet finished for your platform, please PR if you own the device", this.instructionsContainer, "", this.plugin);
+        });
     }
     renderLinuxInstructions() {
-        obsidian.MarkdownRenderer.render(this.app, `Instructions not yet finished for your platform, please PR if you own the device`, this.instructionsContainer, "", this.plugin);
+        return __awaiter(this, void 0, void 0, function* () {
+            yield obsidian.MarkdownRenderer.render(this.app, "Instructions not yet finished for your platform, please PR if you own the device", this.instructionsContainer, "", this.plugin);
+        });
     }
     renderIOSInstructions() {
-        obsidian.MarkdownRenderer.render(this.app, `Instructions not yet finished for your platform, please PR if you own the device`, this.instructionsContainer, "", this.plugin);
+        return __awaiter(this, void 0, void 0, function* () {
+            yield obsidian.MarkdownRenderer.render(this.app, "Instructions not yet finished for your platform, please PR if you own the device", this.instructionsContainer, "", this.plugin);
+        });
+    }
+}
+
+const DEFAULT_TEMPLATE_DIR = "/templates/";
+const DEFAULT_TEMPLATE = "blank.pdf";
+const DEFAULT_ASSET_PATH = "/handwritten-notes/";
+const DEFAULT_SETTINGS = {
+    defaultPath: DEFAULT_ASSET_PATH,
+    assetUrl: "",
+    useRelativePaths: false,
+    showWelcomeModal: true,
+    collapseEmbeds: false,
+    favoriteTemplate: DEFAULT_TEMPLATE,
+    templatesAtCustom: false,
+    templatesPath: DEFAULT_TEMPLATE_DIR,
+    openInNewTab: false,
+    createFolderIfNotExists: true,
+};
+
+/**
+ * Loads the PDF template from the specified path.
+ *
+ * @param {App} app - The obsidian app instance.
+ * @param {string} path - The template file to be loaded.
+ * @return {Promise<any>} The loaded template in binary format.
+ */
+function loadPdfTemplate(app, path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return app.vault.adapter.readBinary(obsidian.normalizePath(path));
+    });
+}
+/**
+ * Creates a binary file in the specified path.
+ *
+ * @param {App} app - The obsidian app instance.
+ * @param {any} template - The template to be written to the file.
+ * @param {string} path - The path where the file will be created.
+ * @throws Will throw an error if the file already exists or on creation failure.
+ */
+function createBinaryFile(app, template, path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield app.vault.createBinary(path, template);
+        }
+        catch (e) {
+            new obsidian.Notice(e.message.includes("already exists")
+                ? "File already exists!"
+                : `Error creating file! Note: ${e.message}`);
+            console.error(e);
+        }
+    });
+}
+/**
+ * Opens a file in the obsidian app.
+ *
+ * @param {App} app - The obsidian app instance.
+ * @param {string} path - The path of the file to be opened.
+ * @param newTab
+ */
+function openCreatedFile(app, path, newTab) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const leaf = app.workspace.getLeaf(newTab);
+        const file = app.vault.getAbstractFileByPath(path);
+        if (file instanceof obsidian.TFile) {
+            yield leaf.openFile(file, { active: newTab });
+        }
+    });
+}
+/**
+ * Appends an 'Annotate' button to the specified toolbar.
+ *
+ * @param {HTMLElement} toolbar - The toolbar where the button will be appended.
+ * @param {() => Promise<void>} onClick - The async function to be executed when the button is clicked.
+ */
+function appendAnnotateButton(toolbar, onClick) {
+    // Check if the button already exists before appending
+    const matchingChild = toolbar.querySelector(".pdf-annotate-button");
+    if (matchingChild)
+        return;
+    // Check if the button already exists before appending
+    const button = new obsidian.ButtonComponent(toolbar).setIcon("pen-tool");
+    // give it a unique id so we can find it later
+    button.setTooltip("Annotate");
+    // button.buttonEl.classList.add("pdf-annotate-button");
+    button.setClass("pdf-annotate-button");
+    button.setClass("clickable-icon");
+    // Handle the async onClick function
+    button.onClick(() => __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield onClick();
+        }
+        catch (error) {
+            console.error("Error handling async onClick:", error);
+        }
+    }));
+}
+/**
+ * Initializes the templates folder if it doesn't exist.
+ *
+ * @param {Plugin} plugin - The obsidian plugin instance.
+ * @throws Will throw an error if there's an issue in creating the folder.
+ */
+function initTemplatesFolder(plugin) {
+    return __awaiter(this, void 0, void 0, function* () {
+        // @ts-ignore
+        const templatesFolder = yield getTemplatesFolder(plugin);
+        try {
+            yield plugin.app.vault.createFolder(templatesFolder);
+        }
+        catch (e) {
+            // Ignore error if folder already exists
+        }
+        const defaultTemplatePath = obsidian.normalizePath(`${templatesFolder}/blank.pdf`);
+        if (yield fileExists(plugin.app, defaultTemplatePath))
+            return;
+        // Download default template if it doesn't exist
+        const TEMPLATE_URL = "https://mag.wcoomd.org/uploads/2018/05/blank.pdf";
+        yield downloadFile(plugin.app, TEMPLATE_URL, defaultTemplatePath);
+        // console.log("Downloaded template to " + defaultTemplatePath);
+    });
+}
+/**
+ * Downloads a file from a URL and saves it to the specified path.
+ *
+ * @param {App} app - The obsidian app instance.
+ * @param {string} url - The URL of the file to be downloaded.
+ * @param {string} path - The path where the file will be saved.
+ * @throws Will throw an error if there's an issue in fetching the file.
+ */
+function downloadFile(app, url, path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const response = yield obsidian.requestUrl({
+                url: url,
+                method: "GET",
+                contentType: "arraybuffer",
+            });
+            const body = response.arrayBuffer;
+            yield app.vault.createBinary(path, body);
+        }
+        catch (err) {
+            console.error(err);
+            new obsidian.Notice("Error fetching file!");
+        }
+    });
+}
+/** Checks if a file exists in the vault.
+ * @param {App} app - The obsidian app instance.
+ * @param {string} path - The path of the file to be checked.
+ * @return {boolean} True if the file exists, false otherwise.
+ *
+ * @throws It will throw an error if the file exists
+ * @brief Use vault.adapter.exists to determine if the file exists. This works for all files, whether in or out of the vault.
+ */
+function fileExists(app, path) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            return yield app.vault.adapter.exists(path);
+        }
+        catch (err) {
+            console.error("Error checking file existence");
+            return false;
+        }
+    });
+}
+/** Gets the path of the template folder based on the current settings.
+ * @param plugin The obsidian plugin instance.
+ * @return {string} The path of the template folder.
+ * @brief If the templates are stored in the custom folder, return the custom folder path. Otherwise, return the default folder path.
+ */
+function getTemplatesFolder(plugin) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const settings = plugin.settings;
+        return settings.templatesAtCustom
+            ? obsidian.normalizePath(settings.templatesPath)
+            : obsidian.normalizePath(plugin.manifest.dir + DEFAULT_TEMPLATE_DIR);
+    });
+}
+
+class NotePDFSettingsTab extends obsidian.PluginSettingTab {
+    constructor(app, plugin) {
+        super(app, plugin);
+        this.plugin = plugin;
+    }
+    display() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { containerEl: modal } = this;
+            modal.empty();
+            // GENERAL SETTINGS
+            new obsidian.Setting(modal).setName("General").setHeading();
+            this.CollapseEmbedsToggle();
+            this.openInNewTabButton();
+            // Generate new note
+            new obsidian.Setting(modal).setName("Creation").setHeading();
+            this.createRelativePathToggle();
+            this.createDefaultPathTextInput();
+            this.createFolderIfNotExists();
+            // Settings heading
+            // TEMPLATES
+            yield this.createTemplatesSection();
+            this.createTemplateFolderPath();
+            yield this.createSettingWithOptions();
+        });
+    }
+    createFolderIfNotExists() {
+        new obsidian.Setting(this.containerEl)
+            .setName("Create folder if not exists")
+            .setDesc("Create the folder if it does not exist when choosing destination outside of default path/relative path.")
+            .addToggle((toggle) => toggle
+            .setValue(this.plugin.settings.createFolderIfNotExists)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.createFolderIfNotExists = value;
+            yield this.plugin.saveSettings();
+        })));
+    }
+    CollapseEmbedsToggle() {
+        new obsidian.Setting(this.containerEl)
+            .setName("Collapse embeds")
+            .setDesc("Collapse embeds by default to save vertical space.")
+            .addToggle((toggle) => toggle
+            .setValue(this.plugin.settings.collapseEmbeds)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.collapseEmbeds = value;
+            yield this.plugin.saveSettings();
+        })));
+    }
+    createRelativePathToggle() {
+        new obsidian.Setting(this.containerEl)
+            .setName("Use relative path")
+            .setDesc("Use relative path when creating the file.")
+            .addToggle((toggle) => toggle
+            .setValue(this.plugin.settings.useRelativePaths)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.useRelativePaths = value;
+            yield this.plugin.saveSettings();
+            yield this.display();
+        })));
+    }
+    createDefaultPathTextInput() {
+        new obsidian.Setting(this.containerEl)
+            .setName("Default Path for new notes")
+            .setDesc("Path to be used if relative path is disabled or can't be used (no active file while creating).")
+            .addText((text) => text
+            .setPlaceholder(DEFAULT_ASSET_PATH)
+            .setValue(this.plugin.settings.defaultPath)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.defaultPath = value;
+            yield this.plugin.saveSettings();
+        })));
+    }
+    createTemplatesSection() {
+        return __awaiter(this, void 0, void 0, function* () {
+            // add a div
+            const titleEl = new obsidian.Setting(this.containerEl)
+                .setName("Templates")
+                .setHeading();
+            this.createFolderButton(titleEl);
+            const pluginFolder = yield getTemplatesFolder(this.plugin);
+            yield obsidian.MarkdownRenderer.render(this.app, `You can use **any** PDF as a template for the notes. Just add it to the templates folder and it will appear here. 
+      \`${pluginFolder}\``, this.containerEl, "", this.plugin);
+        });
+    }
+    createTemplateFolderPath() {
+        // Whether the templates should be stored in a custom folder
+        new obsidian.Setting(this.containerEl)
+            .setName("Store templates in a custom folder")
+            .setDesc("Store the templates in a custom folder outside the plugin path. (May resolve issues with syncing)")
+            .addToggle((toggle) => toggle
+            .setValue(this.plugin.settings.templatesAtCustom)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            !value // If the value is false, set the path to the default path
+                ? // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+                    (this.plugin.settings.templatesPath = DEFAULT_TEMPLATE_DIR)
+                : null;
+            this.plugin.settings.templatesAtCustom = value;
+            yield this.plugin.saveSettings();
+            yield initTemplatesFolder(this.plugin);
+            yield this.display();
+        })));
+        if (!this.plugin.settings.templatesAtCustom)
+            return;
+        // Folder relative to the plugin
+        new obsidian.Setting(this.containerEl)
+            .setName("Templates folder")
+            .setDesc("Path to the templates folder.")
+            .addText((text) => text
+            .setPlaceholder(DEFAULT_TEMPLATE_DIR)
+            .setValue(this.plugin.settings.templatesPath)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.templatesPath = value;
+            yield this.plugin.saveSettings();
+        })));
+        // Dividing line
+    }
+    createFolderButton(title) {
+        // div for the buttons
+        title.addExtraButton((button) => {
+            button
+                .setIcon("sync")
+                .setTooltip("Reload templates")
+                .onClick(() => __awaiter(this, void 0, void 0, function* () {
+                yield initTemplatesFolder(this.plugin); // Reload default template just in case
+                yield this.display();
+            }));
+        });
+        title.addExtraButton((button) => {
+            button
+                .setIcon("folder")
+                .setTooltip("Open templates folder in the explorer")
+                .onClick(() => __awaiter(this, void 0, void 0, function* () {
+                yield this.app.showInFolder(obsidian.normalizePath(`${yield getTemplatesFolder(this.plugin)}/${DEFAULT_TEMPLATE}`));
+            }));
+        });
+    }
+    createSettingWithOptions() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { containerEl } = this;
+            yield obsidian.MarkdownRenderer.render(this.app, "### Available Templates", containerEl, "", this.plugin);
+            const scrollContainer = containerEl.createDiv();
+            scrollContainer.addClass("settings-scroll-container");
+            // Show also templates in the templates folder
+            const templatePath = yield getTemplatesFolder(this.plugin);
+            const templates = yield this.app.vault.adapter.list(templatePath);
+            // iterate over the templates and show them
+            for (const filePath of templates.files) {
+                const fileName = filePath.split("/").pop();
+                // fileName without extension and capitalized
+                const title = fileName === null || fileName === void 0 ? void 0 : fileName.split(".")[0].replace(/-/g, " ").replace(/\w\S*/g, (w) => w.replace(/^\w/, (c) => c.toUpperCase()));
+                const setting = new obsidian.Setting(scrollContainer)
+                    .setName(title)
+                    .setDesc(fileName);
+                this.favoriteButton(setting, fileName);
+                // Delete button and lock for default template
+                this.deleteButton(setting, filePath, fileName);
+            }
+        });
+    }
+    deleteButton(setting, filePath, fileName) {
+        // Default file cant be deleted
+        if (fileName === DEFAULT_TEMPLATE) {
+            // Add a lock icon
+            setting.addButton((button) => button
+                .setIcon("lock")
+                .setTooltip("Default template")
+                .setClass("settings-button")
+                .setClass("settings-folder-button"));
+        }
+        else {
+            setting.addButton((button) => button
+                .setIcon("trash")
+                .setTooltip("Delete template")
+                .setClass("settings-button")
+                .onClick(() => __awaiter(this, void 0, void 0, function* () {
+                // Check if the template is the favorite template
+                if (this.isDefaultTemplate(fileName))
+                    this.plugin.settings.favoriteTemplate = DEFAULT_TEMPLATE;
+                try {
+                    yield this.app.vault.adapter.remove(filePath);
+                    //console.log(`Deleted asset: ${filePath}`);
+                    yield this.display();
+                }
+                catch (err) {
+                    console.error(`Error deleting asset ${filePath}:`, err);
+                }
+            })));
+        }
+    }
+    isDefaultTemplate(fileName) {
+        return fileName === this.plugin.settings.favoriteTemplate;
+    }
+    openInNewTabButton() {
+        new obsidian.Setting(this.containerEl)
+            .setName("Open in new tab")
+            .setDesc("Open the generated file in a new tab instead of the active tab.")
+            .addToggle((toggle) => toggle
+            .setValue(this.plugin.settings.openInNewTab)
+            .onChange((value) => __awaiter(this, void 0, void 0, function* () {
+            this.plugin.settings.openInNewTab = value;
+            yield this.plugin.saveSettings();
+            yield this.display();
+        })));
+    }
+    favoriteButton(setting, fileName) {
+        setting.addButton((button) => button
+            .setIcon(this.plugin.settings.favoriteTemplate === fileName
+            ? "star"
+            : "crossed-star")
+            .setTooltip("Favorite template")
+            .setClass("settings-button")
+            .onClick(() => __awaiter(this, void 0, void 0, function* () {
+            // if the template is not favorite, make it favorite else do nothing
+            if (this.isDefaultTemplate(fileName))
+                return;
+            this.plugin.settings.favoriteTemplate = fileName;
+            yield this.plugin.saveSettings();
+            // refresh the settings tab
+            yield this.display();
+        })));
+    }
+}
+
+class FileExistsError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "FileExistsError";
+        new obsidian.Notice(message);
+    }
+}
+class TemplateNotFoundError extends Error {
+    constructor(message) {
+        super(message);
+        this.name = "TemplateNotFoundError";
+        new obsidian.Notice(message);
     }
 }
 
 class NotePDF extends obsidian.Plugin {
+    quickCreate(dest) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const destFolder = dest !== null && dest !== void 0 ? dest : (yield this.getDestFolder());
+            // Parent file + note + timestamp in date format with time
+            const fileName = `${(_a = this.app.workspace.getActiveFile()) === null || _a === void 0 ? void 0 : _a.basename}-note-${new Date().toISOString().split("T")[0]}-${new Date().getHours()}-${new Date().getMinutes()}-${new Date().getSeconds()}`;
+            return yield this.createPDF(fileName, destFolder, this.settings.favoriteTemplate);
+        });
+    }
     // Lifecycle methods
     onload() {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.loadSettings();
             this.addSettingTab(new NotePDFSettingsTab(this.app, this));
+            /** CREATE FROM MODAL */
             this.addRibbonIcon("pencil", "Create empty handwritten note", () => __awaiter(this, void 0, void 0, function* () {
-                const path = yield this.createPDFwithModal();
-                openCreatedFile(this.app, path);
+                const path = yield this.createPDFwithModal({ chooseDest: true });
+                yield openCreatedFile(this.app, path, this.settings.openInNewTab);
             }));
             this.addCommand({
                 id: "modal-create-open",
                 name: "Modal: Create and open an empty handwritten note",
-                editorCallback: () => __awaiter(this, void 0, void 0, function* () {
-                    const filePath = yield this.createPDFwithModal();
-                    openCreatedFile(this.app, filePath);
+                callback: () => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
+                    const editor = (_a = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)) === null || _a === void 0 ? void 0 : _a.editor;
+                    const filePath = yield this.createPDFwithModal({
+                        chooseDest: true,
+                        inEditor: !!editor,
+                    });
+                    yield openCreatedFile(this.app, filePath, this.settings.openInNewTab);
                 }),
             });
             this.addCommand({
                 id: "modal-create-embed",
                 name: "Modal: Create and embed an empty handwritten note",
-                editorCallback: () => __awaiter(this, void 0, void 0, function* () {
-                    var _a;
-                    const filePath = yield this.createPDFwithModal();
-                    const editor = (_a = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)) === null || _a === void 0 ? void 0 : _a.editor;
-                    if (editor) {
-                        editor.replaceSelection(`![[${filePath}]]`);
-                    }
+                editorCallback: (editor) => __awaiter(this, void 0, void 0, function* () {
+                    const filePath = yield this.createPDFwithModal({
+                        chooseDest: true,
+                        inEditor: true,
+                    });
+                    editor.replaceSelection(`![[${filePath}]]`);
+                }),
+            });
+            /** QUICK CREATE FROM FAVORITE **/
+            this.addCommand({
+                id: "create-favorite",
+                name: "Create from favorite template",
+                callback: () => __awaiter(this, void 0, void 0, function* () {
+                    yield this.quickCreate();
                 }),
             });
             this.addCommand({
                 id: "quick-create-embed",
                 name: "Create and embed from favorite template",
-                editorCallback: () => __awaiter(this, void 0, void 0, function* () {
-                    var _b, _c;
-                    const destFolder = yield this.getDestFolder();
-                    // Parent file + note + timestamp in date format with time
-                    const fileName = `${(_b = this.app.workspace.getActiveFile()) === null || _b === void 0 ? void 0 : _b.basename}-note-${new Date().toISOString().split("T")[0]}-${new Date().getHours()}-${new Date().getMinutes()}-${new Date().getSeconds()}`;
-                    const filePath = yield this.createPDF(fileName, destFolder, this.settings.favoriteTemplate);
-                    // insert the path at the cursor
-                    const editor = (_c = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)) === null || _c === void 0 ? void 0 : _c.editor;
-                    if (editor) {
-                        editor.replaceSelection(`![[${filePath}]]`);
-                    }
+                editorCallback: (editor) => __awaiter(this, void 0, void 0, function* () {
+                    const filePath = yield this.quickCreate();
+                    editor.replaceSelection(`![[${filePath}]]`);
                 }),
             });
             this.addCommand({
                 id: "quick-create-embed-open",
                 name: "Create and embed and open from favorite template",
-                editorCallback: () => __awaiter(this, void 0, void 0, function* () {
-                    var _d, _e;
-                    const destFolder = yield this.getDestFolder();
-                    // Parent file + note + timestamp in date format with time
-                    const fileName = `${(_d = this.app.workspace.getActiveFile()) === null || _d === void 0 ? void 0 : _d.basename}-note-${new Date().toISOString().split("T")[0]}-${new Date().getHours()}-${new Date().getMinutes()}-${new Date().getSeconds()}`;
-                    const filePath = yield this.createPDF(fileName, destFolder, this.settings.favoriteTemplate);
+                editorCallback: (editor) => __awaiter(this, void 0, void 0, function* () {
+                    const filePath = yield this.quickCreate();
                     // insert the path at the cursor
-                    const editor = (_e = this.app.workspace.getActiveViewOfType(obsidian.MarkdownView)) === null || _e === void 0 ? void 0 : _e.editor;
-                    if (editor) {
-                        editor.replaceSelection(`![[${filePath}]]`);
-                    }
+                    editor.replaceSelection(`![[${filePath}]]`);
                     // openCreatedFile(this.app, filePath);
                     // get TFile from path
-                    const pdfFile = yield this.app.vault.getAbstractFileByPath(filePath);
+                    const pdfFile = this.app.vault.getAbstractFileByPath(filePath);
                     if (!pdfFile)
                         return;
                     yield this.openEmbeddedExternal(pdfFile);
+                }),
+            });
+            this.addCommand({
+                id: "quick-create-choose-dest",
+                name: "Quick create and choose destination from modal",
+                callback: () => __awaiter(this, void 0, void 0, function* () {
+                    yield this.quickCreateWithDest();
+                }),
+            });
+            this.addCommand({
+                id: "quick-create-choose-dest-embed",
+                name: "Quick create and choose destination from modal and embed",
+                editorCallback: (editor) => __awaiter(this, void 0, void 0, function* () {
+                    yield this.quickCreateWithDest(editor);
                 }),
             });
             this.app.workspace.onLayoutReady(() => {
@@ -723,31 +851,50 @@ class NotePDF extends obsidian.Plugin {
             yield this.saveData(this.settings);
         });
     }
-    // PDF creation methods
-    createPDFwithModal() {
+    quickCreateWithDest(editor) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { app } = this;
+            new ChooseDestModals(this.app, (result) => __awaiter(this, void 0, void 0, function* () {
+                const dest = result.path;
+                const filePath = yield this.quickCreate(dest);
+                if (editor)
+                    editor.replaceSelection(`![[${filePath}]]`);
+                yield openCreatedFile(this.app, filePath, this.settings.openInNewTab);
+            })).open();
+        });
+    }
+    // PDF creation methods
+    createPDFwithModal(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { chooseDest = false, inEditor = false } = options;
             const templatesFolder = yield getTemplatesFolder(this);
             return new Promise((resolve, reject) => {
-                new PDFCreatorModal(app, this.manifest, this.settings.favoriteTemplate, templatesFolder, (result) => __awaiter(this, void 0, void 0, function* () {
-                    try {
-                        let destFolder = yield this.getDestFolder();
-                        if (destFolder) {
-                            const { template, name } = result;
-                            const path = yield this.createPDF(name, destFolder, template);
-                            // Resolve the promise with the path when done
-                            resolve(path);
-                        }
+                new PDFCreatorModal(this, templatesFolder, (result) => __awaiter(this, void 0, void 0, function* () {
+                    var _a;
+                    console.debug("Creating:", result);
+                    const destFolder = (_a = result.path) !== null && _a !== void 0 ? _a : (yield this.getDestFolder());
+                    const destTFolder = this.app.vault.getAbstractFileByPath(obsidian.normalizePath(destFolder));
+                    console.debug("Destination folder:", destTFolder);
+                    if (!destTFolder || destTFolder instanceof obsidian.TFile) {
+                        if (this.settings.createFolderIfNotExists)
+                            yield this.app.vault.createFolder(destFolder);
                         else {
-                            // No destination folder found
-                            reject(new Error("No destination folder found."));
+                            new obsidian.Notice(obsidian.sanitizeHTMLToDom(`<span class="error">Destination "<code>${destFolder}</code>" does not exist</span>`));
+                            throw new Error("Destination folder does not exist");
                         }
+                    }
+                    console.info("Creating PDF", result);
+                    try {
+                        const { template, name } = result;
+                        const path = yield this.createPDF(name, destFolder, template);
+                        // Resolve the promise with the path when done
+                        resolve(path);
                     }
                     catch (error) {
                         // Reject the promise if any errors occur
                         reject(error);
+                        console.error(error);
                     }
-                })).open();
+                }), chooseDest, inEditor).open();
             });
         });
     }
@@ -784,27 +931,28 @@ class NotePDF extends obsidian.Plugin {
      */
     getDestFolder() {
         var _a, _b;
-        const { app } = this;
-        if (this.settings.useRelativePaths) {
-            const parentPath = (_b = (_a = app.workspace.getActiveFile()) === null || _a === void 0 ? void 0 : _a.parent) === null || _b === void 0 ? void 0 : _b.path;
-            // maybe no file is open, for now just return the root
-            if (!parentPath)
-                return app.vault.getRoot().path;
-            return parentPath;
-            // Using a template folder
-        }
-        else {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { app } = this;
+            if (this.settings.useRelativePaths) {
+                const parentPath = (_b = (_a = app.workspace.getActiveFile()) === null || _a === void 0 ? void 0 : _a.parent) === null || _b === void 0 ? void 0 : _b.path;
+                // maybe no file is open, for now just return the root
+                if (!parentPath) {
+                    if (this.settings.defaultPath.trim() === "" ||
+                        this.settings.defaultPath.trim() === "/")
+                        return app.vault.getRoot().path;
+                    return this.settings.defaultPath;
+                }
+                return parentPath;
+            }
             const defaultFolderPath = obsidian.normalizePath(this.settings.defaultPath); // Check if the template folder exists
             if (app.vault.getAbstractFileByPath(defaultFolderPath)) {
                 return defaultFolderPath;
             }
-            else {
-                // Create the template folder if it doesn't exist
-                app.vault.createFolder(defaultFolderPath);
-                new obsidian.Notice("Template folder not found. Creating folder.");
-                return defaultFolderPath;
-            }
-        }
+            // Create the template folder if it doesn't exist
+            yield app.vault.createFolder(defaultFolderPath);
+            new obsidian.Notice("Template folder not found. Creating folder.");
+            return defaultFolderPath;
+        });
     }
     // Annotation button methods
     addAnnotateButton() {
@@ -840,11 +988,10 @@ class NotePDF extends obsidian.Plugin {
             const pdfEmbeds = markdownContainer.querySelectorAll(".pdf-embed");
             // Convert the NodeList to an array
             for (const embed of Array.from(pdfEmbeds)) {
-                let pdfFile;
                 const pdfLink = embed.getAttribute("src");
                 const currentNotePath = this.app.workspace.getActiveFile().path;
-                pdfFile = this.app.metadataCache.getFirstLinkpathDest(pdfLink, currentNotePath);
-                let rightToolbar = embed.querySelector(".pdf-toolbar-right");
+                const pdfFile = this.app.metadataCache.getFirstLinkpathDest(pdfLink, currentNotePath);
+                const rightToolbar = embed.querySelector(".pdf-toolbar-right");
                 if (!rightToolbar)
                     continue;
                 appendAnnotateButton(rightToolbar, () => __awaiter(this, void 0, void 0, function* () {
@@ -899,7 +1046,7 @@ class NotePDF extends obsidian.Plugin {
                 pdfNameButton.setTooltip("Open link");
                 toolbar.insertBefore(pdfNameButton.buttonEl, rightToolbar);
                 pdfNameButton.onClick(() => __awaiter(this, void 0, void 0, function* () {
-                    openCreatedFile(this.app, pdfLink);
+                    yield openCreatedFile(this.app, pdfLink, this.settings.openInNewTab);
                 }));
             }
         });
