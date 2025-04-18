@@ -22,3 +22,16 @@ Curso enfocado en asentar unas buenas bases para el control de versiones con Git
 
 **S. 17** [Lu. 21](./Clase/25-04-21.md), [Ma. 22](./Clase/25-04-22.md), [Mi. 23](./Clase/25-04-23.md), [Ju. 24](./Clase/25-04-24.md), [Vi. 25](./Clase/25-04-25.md),
 
+## Tutorial
+
+### 0. Clonar repositorio
+
+### 1. Descargar Obsidian
+
+https://obsidian.md/download
+
+### 2. Abrir el repositorio
+
+![Paso 2](./assets/Captura_20250418_102927.jpg)
+
+### 3. Aceptar plugins y configuración del autor
