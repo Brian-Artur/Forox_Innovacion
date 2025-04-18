@@ -13,24 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/25-04-04.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "25-04-04"
-            }
-          },
-          {
-            "id": "813824cd95e5e929",
-            "type": "leaf",
-            "state": {
-              "type": "excalidraw",
-              "state": {
-                "file": "Excalidraw/Drawing 2025-04-17 19.04.48.excalidraw.md"
-              },
-              "icon": "excalidraw-icon",
-              "title": "Drawing 2025-04-17 19.04.48.excalidraw"
+              "title": "README"
             }
           }
         ]
@@ -56,7 +44,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Explorador de archivos"
             }
           },
           {
@@ -169,31 +157,32 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
       "handwritten-notes:Create empty handwritten note": false,
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
   "active": "e9df5331608e7773",
   "lastOpenFiles": [
-    "Clase/25-04-03.md",
+    "Clase/25-04-09.md",
+    "Excalidraw/Drawing 2025-04-17 19.04.48.excalidraw.md",
+    "README.md",
     "Clase/25-04-02.md",
+    "Clase/25-04-04.md",
+    "Clase/25-04-03.md",
     "Clase/25-04-01.md",
     "Clase/25-03-31.md",
-    "Excalidraw/Drawing 2025-04-17 19.04.48.excalidraw.md",
     "pdf/UT5a - Introduccion al lenguaje unificado UML-Diagrama de Clases.pdf",
     "Drawer/Styles.md",
     "Drawer/Consejos JC.md",
     "Drawer/Angular.md",
     "Clase/25-04-16.md",
-    "Clase/25-03-09.md",
     "Clase/25-04-08.md",
-    "Clase/25-04-04.md",
     "Clase/JS.md",
     "Clase/git.md",
     "Clase/Etiquetas Semánticas.md",
@@ -204,7 +193,6 @@
     "Clase/25-03-14.md",
     "Clase/25-03-18.md",
     "Clase/25-03-17.md",
-    "README.md",
     "pdf/IFCD0210-MF0492_3-UF1844-Desarrollo-de-aplicaciones-web-en-el-entorno-servidor-Rafael-Luis-Granados-LaPaz_.pdf",
     "edificio.png",
     "assets/git reset-soft.svg",
