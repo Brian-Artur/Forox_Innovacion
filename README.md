@@ -18,7 +18,7 @@ Curso enfocado en asentar unas buenas bases para el control de versiones con Git
 
 **S. 15** [Lu. 07](./Clase/25-04-07.md), [Ma. 08](./Clase/25-04-08.md), [Mi. 09](./Clase/25-04-09.md), [Ju. 10](./Clase/25-04-10.md), [Vi. 11](./Clase/25-04-11.md), [Do. 13](./Clase/25-04-13.md)
 
-**S. 16** [Lu. 14](./Clase/25-04-14.md), [Ma. 15](./Clase/25-04-15.md), [Mi. 16](./Clase/25-04-16.md),
+**S. 16** [Lu. 14](./Clase/25-04-14.md), [Ma. 15](./Clase/25-04-15.md), [Mi. 16](./Clase/25-04-16.md), [Mi. 19](./Clase/25-04-19.md)
 
 **S. 17** [Lu. 21](./Clase/25-04-21.md), [Ma. 22](./Clase/25-04-22.md), [Mi. 23](./Clase/25-04-23.md), [Ju. 24](./Clase/25-04-24.md), [Vi. 25](./Clase/25-04-25.md),
 

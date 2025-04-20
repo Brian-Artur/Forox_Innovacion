@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "README.md",
+                "file": "Clase/25-04-19.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "README"
+              "title": "25-04-19"
             }
           }
         ]
@@ -169,8 +169,21 @@
   },
   "active": "e9df5331608e7773",
   "lastOpenFiles": [
-    "assets/Captura_20250418_102927.jpg",
+    "Pasted image 20250419192206.png",
+    "Pasted image 20250419191248.png",
+    "Excalidraw/Drawing 2025-04-19 11.20.24.excalidraw.md",
+    "Clase/25-04-19.md",
+    "Clase/25-04-16.md",
+    "Pasted Image 20250419112157_641.png",
+    "Pasted Image 20250419112028_737.png",
+    "Excalidraw/Drawing 2025-04-19 10.51.44.excalidraw.md",
+    "Pasted Image 20250419105259_992.png",
+    "Pasted Image 20250419105148_446.png",
+    "Excalidraw/Drawing 2025-04-19 09.49.15.excalidraw.md",
+    "Pasted Image 20250419095001_691.png",
+    "Pasted Image 20250419094919_085.png",
     "README.md",
+    "assets/Captura_20250418_102927.jpg",
     "Clase/25-03-14.md",
     "Clase/25-04-09.md",
     "Excalidraw/Drawing 2025-04-17 19.04.48.excalidraw.md",
@@ -183,7 +196,6 @@
     "Drawer/Styles.md",
     "Drawer/Consejos JC.md",
     "Drawer/Angular.md",
-    "Clase/25-04-16.md",
     "Clase/25-04-08.md",
     "Clase/JS.md",
     "Clase/git.md",
@@ -192,20 +204,9 @@
     "Clase/25-03-25.md",
     "Clase/25-03-21.md",
     "Clase/25-03-19.md",
-    "Clase/25-03-18.md",
-    "Clase/25-03-17.md",
     "pdf/IFCD0210-MF0492_3-UF1844-Desarrollo-de-aplicaciones-web-en-el-entorno-servidor-Rafael-Luis-Granados-LaPaz_.pdf",
     "edificio.png",
     "assets/git reset-soft.svg",
-    "Excalidraw/fast-forward.md",
-    "Excalidraw/mismo index.md",
-    "Excalidraw/mismo index.svg",
-    "assets/Application_Layer.png",
-    "assets/Distintos index.svg",
-    "assets/Draw 25-03-21 12.15.41.excalidraw.svg",
-    "assets/Draw 25-03-20 13.57.06.excalidraw.svg",
-    "assets/visualizar deltas.svg",
-    "assets/rutas relativas.svg",
     "pdf/Guía_rápida_UF1843_espanol.pdf"
   ]
 }
