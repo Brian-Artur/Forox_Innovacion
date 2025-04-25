@@ -1,4 +1,7 @@
 {
   "cssTheme": "Things",
-  "accentColor": "#cb5d8d"
+  "accentColor": "#cb5d8d",
+  "showRibbon": true,
+  "showViewHeader": false,
+  "theme": "system"
 }
