@@ -8,29 +8,29 @@
         "type": "tabs",
         "children": [
           {
-            "id": "95705a32d002b07e",
+            "id": "4338ce4707df95d0",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Clase/Abril/25.04.25/Task.md",
+                "file": "Clase/S_17/25_Vi.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Task"
+              "title": "25_Vi"
             }
           },
           {
-            "id": "5297f35145d2c28d",
+            "id": "7e1cc46742c3fa0b",
             "type": "leaf",
             "state": {
               "type": "excalidraw",
               "state": {
-                "file": "Excalidraw/Drawing 2025-04-25 14.19.13.excalidraw.md"
+                "file": "Excalidraw/Drawing 2025-04-28 07.34.03.excalidraw.md"
               },
               "icon": "excalidraw-icon",
-              "title": "Drawing 2025-04-25 14.19.13.excalidraw"
+              "title": "Drawing 2025-04-28 07.34.03.excalidraw"
             }
           }
         ]
@@ -56,7 +56,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Explorador de archivos"
             }
           },
           {
@@ -66,14 +66,14 @@
               "type": "search",
               "state": {
                 "query": "",
-                "matchingCase": false,
+                "matchingCase": true,
                 "explainSearch": false,
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
               },
               "icon": "lucide-search",
-              "title": "Search"
+              "title": "Buscar"
             }
           },
           {
@@ -90,7 +90,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 214.5
   },
   "right": {
     "id": "87137d9fcc14686d",
@@ -106,6 +106,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Clase/2025-04/24_Ju.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +116,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Enlaces entrantes"
+              "title": "Enlaces entrantes de 24_Ju"
             }
           },
           {
@@ -124,11 +125,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Clase/2025-04/24_Ju.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Enlaces salientes"
+              "title": "Enlaces salientes de 24_Ju"
             }
           },
           {
@@ -160,7 +162,8 @@
               "title": "Esquema"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -170,57 +173,61 @@
   "left-ribbon": {
     "hiddenItems": {
       "obsidian-excalidraw-plugin:New drawing": false,
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
-      "handwritten-notes:Create empty handwritten note": false
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": true,
+      "command-palette:Abrir paleta de comandos": false,
+      "handwritten-notes:Create empty handwritten note": true
     }
   },
-  "active": "95705a32d002b07e",
+  "active": "4338ce4707df95d0",
   "lastOpenFiles": [
-    "Clase/Abril/25.04.25/SQL.md",
-    "Clase/25-04-22.md",
-    "Clase/25.04.23.md",
-    "Clase/25.04.24.md",
-    "Excalidraw/Drawing 2025-04-25 14.19.13.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-25 14.13.22.excalidraw.md",
-    "Clase/25-04-07.md",
-    "Clase/25-04-02.md",
-    "Clase/25-04-01.md",
-    "Clase/Abril/25.04.25/TypeScript.md",
-    "Excalidraw/Drawing 2025-04-25 13.15.13.excalidraw.md",
-    "Pasted Image 20250425131547_783.png",
-    "Clase/Abril/25.04.25/Task.md",
-    "Pasted image 20250425131349.png",
-    "2025-04-25.md",
-    "Excalidraw/Drawing 2025-04-25 11.16.07.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-25 10.15.12.excalidraw.md",
-    "Pasted image 20250425095334.png",
-    "Clase/Abril",
-    "Clase/Abril/25.04.25",
-    "Excalidraw/Drawing 2025-04-24 14.33.56.excalidraw.md",
-    "assets/Pasted Image 20250423120202_571.png",
-    "assets/Pasted Image 20250424143427_864.png",
-    "assets/Pasted image 20250423135921.png",
-    "assets/Pasted image 20250424143345.png",
-    "Excalidraw/Drawing 2025-04-24 14.18.43.excalidraw.md",
-    "assets/Pasted Image 20250424141915_710.png",
-    "Excalidraw/Drawing 2025-04-24 12.21.35.excalidraw.md",
-    "assets/Pasted image 20250424103300.png",
+    "Excalidraw/Drawing 2025-04-28 07.34.03.excalidraw.md",
+    "Pasted Image 20250428073554_626.png",
+    "Pasted Image 20250428073512_513.png",
+    "Pasted Image 20250428073500_608.png",
+    "Clase/S_17/25_Vi.md",
+    "Clase/S_17/27_Do.md",
+    "Excalidraw/Drawing 2025-04-27 16.36.19.excalidraw.md",
+    "Pasted Image 20250427163651_671.png",
+    "Excalidraw/Drawing 2025-04-27 16.31.02.excalidraw.md",
+    "Pasted Image 20250427163222_710.png",
+    "Pasted Image 20250427163125_504.png",
+    "Pasted Image 20250427163107_697.png",
+    "Excalidraw/Drawing 2025-04-26 19.40.50.excalidraw.md",
+    "Pasted image 20250426223127.png",
+    "Pasted image 20250426222603.png",
+    "Drawer/Consejos JC.md",
+    "Clase/S_17/24_Ju.md",
+    "Pasted image 20250426200134.png",
     "Excalidraw/Drawing 2025-04-24 10.07.13.excalidraw.md",
-    "assets/Pasted Image 20250424100748_222.png",
-    "Drawer/Git.md",
-    "Excalidraw/Drawing 2025-04-23 12.01.46.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-22 12.23.28.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-22 14.24.37.excalidraw.md",
-    "Excalidraw/Drawing 2025-04-22 14.38.12.excalidraw.md",
-    "Clase/25-04-21.md",
-    "Excalidraw/Drawing 2025-04-22 14.01.18.excalidraw.md",
-    "pdf/UT5a - Introduccion al lenguaje unificado UML-Diagrama de Clases.pdf",
-    "pdf/IFCD0210-MF0492_3-UF1844-Desarrollo-de-aplicaciones-web-en-el-entorno-servidor-Rafael-Luis-Granados-LaPaz_.pdf",
-    "pdf/Guía_rápida_UF1843_espanol.pdf"
+    "Excalidraw/Drawing 2025-04-26 19.20.36.excalidraw.md",
+    "Clase/S_17/23_Mi.md",
+    "Drawer/Python.md",
+    "TASKS.md",
+    "NOTES.md",
+    "Clase/JS.md",
+    "Clase/git.md",
+    "Excalidraw/Drawing 2025-03-30 07.25.53.excalidraw.md",
+    "Clase/S_11/14_Vi.md",
+    "Clase/S_12/17_Lu.md",
+    "Clase/S_17/22_Ma.md",
+    "Clase/S_17/21_Lu.md",
+    "Clase/S_17/25-04-25/Task.md",
+    "Clase/S_17/25-04-25/SQL.md",
+    "Clase/S_13/27_Ju.md",
+    "Clase/S_13/24_Lu.md",
+    "Clase/S_18",
+    "Clase/S_17",
+    "Clase/S_16",
+    "Clase/S_13",
+    "Clase/S_12",
+    "Clase/S_11",
+    "Clase/S_10",
+    "Clase/S_15",
+    "Clase/S_14",
+    "Excalidraw/Drawing 2025-04-08 11.30.28.excalidraw.md.part"
   ]
 }

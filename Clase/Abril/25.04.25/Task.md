@@ -1,8 +1,0 @@
-- [ ] Repasar como el tipo never en una función, se puede emplear con un try-catch.
-- [ ] Formalmente qué es una tupla?
-- [ ] Qué se considera tupla en JS?
-- [ ] Cuál es el beneficio de tener tupas en TS?
-- [ ] Qué diferencia hay para manejar tuplas en Python y TS?
-- [ ] Buscar qué diferencia hay entre una enumeración y un objeto en TS, en su forma de escribirlo.
-- [ ] Cuál es la diferencia hay entre MySQL y MaríaDB?
-- [ ] Qué tipos de datos se pueden manejar en MySQL

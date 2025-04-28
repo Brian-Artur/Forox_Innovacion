@@ -1,17 +1,15 @@
-#2025-03-14
-## Moverse entre directorios
+# Moverse entre directorios
 - `pwd` : para saber donde ==estamos==, en qué carpeta
 - *ctrl + l* : limpiar terminal bash
 - `ls -l` : devuelve lista de archivos
-- `ls -la` : devuelve lista **con archivos ocultos**. #2025-03-17 
+- `ls -la` : devuelve lista **con archivos ocultos**. 
 >Cuando un archivo/directorio lleva espacios, hay que envolverlo entre comillas
 - `nano` : es para crear el archivo que quieras desde la consola
 	- ctrl + x : salir
 	- y : guardar
 	- intro  
-- `cat archivo.txt` Para ver el contenido de un archivo #2025-03-19 
+- `cat archivo.txt` Para ver el contenido de un archivo
 
-#2025-03-17
 ![[Drawing 2025-03-30 07.25.53.excalidraw|250]] 
 Palabra completa va con 2 `--` Ej: `ls --all`
 Pero si va una sola letra, porque es una abreviatura, va 1 solo `-` Ej: `ls -a`
@@ -20,22 +18,19 @@ Podemos resumirlo en `ls -al`
 
 `mv "nombreActual" "nuevoNombre"` para renombrar
 
-## Directorios
+# Directorios
 ![[Drawing 2025-03-30 10.35.07.excalidraw]]
-## Git
-
-### Configuranción
+### Configuranción Git
 - `git config --global user.email "email"`
 - `git config --global user.name "NickName"`
 - `git config --list` : para ver nuestros datos.  *q* : salir
-### Iniciar proyecto
+### Iniciar proyecto Git
 - `git init` : para inicializar un repositorio con GIT.
 	- Con esto ya vamos a poder realizar el control de versiones.
 - `git add .` : le da seguimiento a ese archivo
-- `git add *.html` para subir los archivos con la extensión html #2025-03-19 
+- `git add *.html` para subir los archivos con la extensión html.
 - `git commit -m "Initial commit"` : confirmación de los cambios. *"Update file"* Actualización de archivo.
-- `git commit --amend -m "mensajeCoregido"` Sólo modifica el mansaje, nada más #2025-03-18 
-- 
+- `git commit --amend -m "mensajeCoregido"` Sólo modifica el mansaje, nada más.
 
 ### Volver a commit anterior
 - `git reset --soft b6ed4525` : para volver a una versión anterior, sin destrucción
@@ -44,10 +39,7 @@ Podemos resumirlo en `ls -al`
 ![Areas de Git|500](git.svg)
 
 ---
-#2025-03-17 
-
 Cualquier comando que aparezca entre `[]` significa que es opcional.
-[git-clone.html](file:///C:/Program%20Files/Git/mingw64/share/doc/git-doc/git-clone.html)
 ### Git help
 Cuando no sepamos qué significa un comando, podemos usar un `--help` para ayudarnos. 
 `git push --help`
@@ -66,15 +58,11 @@ La carpeta *.git* es la encargada de hacer el seguimiento de los archivos que ha
 `git rm --cached <file>` sirve para sacar ese archivo de la etapa de stage.
 `git rm --cached -r .` para sacar varios archivos dentro de carpetas.
 
-Reinicializar un repositorio `git init` no hace que se pierda lo que ya tienes hecho.
+Reinicializar un repositorio con `git init` no hace que se pierda lo que ya tienes hecho.
 
 ---
-
-#2025-03-18
-
 ![[Drawing 2025-03-30 07.54.15.excalidraw|350]]
 `git reset carpeta`  forma antigua de hacer un reset de lo que esté en el stage.
-
 ### Configuración Git
 `git config --global init.defaultBranch main` Para que utilice rama `main` por defecto.
 `git config --global core.autocrlf true` Para habilitar el CRLF en los archivos que se le hagan commit.
@@ -91,7 +79,7 @@ Regresamos a un commit anterior, de forma blanda. `HEAD~1`
 `git branch -m "nombreActual" "nombreNuevo"` Renombrar una rama distinta a la que estamos.
 > Una rama viene a ser una versión alterna del mundo en el que estamos.
 
-#2025-03-19 
+---
 `git branch --move nombre-antiguo nombre-nuevo` Renombrar rama
 `git checkou -b "nuevaRama"` Para crear una nueva rama y movernos a esa.
 `git branch "nuevaRama"` Para crear nueva rama sin cambiarnos de rama.
@@ -100,7 +88,6 @@ Regresamos a un commit anterior, de forma blanda. `HEAD~1`
 `touch archivo` para crear el archivo en blanco.
 `git merge rama` Para traer los cambios que se han hecho en esa rama, a la rama en la que estamos.
 > En caso de que tengamos que hacer un *merge* de otra rama `git merge develop` , pisando los cambios que se han hecho, va a tener que ser un marge 'ort', una "fusion bruta".
-
 ### Editor de código
 ```
 $ git config --global --get core.editor
@@ -111,11 +98,7 @@ Para utilizar el Notepad++ como editor por defecto con Git Bash.
 Cuando usemos `git commit` nos abrirá ese editor. Y ahí tenemos que guardarlo; no sin antes escribiendo el la primera línea el nombre que queremos que tenga ese commit.
 `git config --global core.editor "code --wait"` para volver al VSCode por defecto.
 
-
-
 ---
-#2025-03-19
-
 > [!tip]
 > En caso de que tengamos mucho Archivos que comienzan con el mismo nombre, al darle TAB nos va a parar en la parte que se repite. Es ahí cuando debemos escribir la diferencia. Cuando lo hagamos, ya podremos volver a hacer otro TAB para autocompletar el resto.
 
@@ -131,8 +114,6 @@ Parra GIT, ese repositorio/carpeta que esté vacío, no lo va a tener en cuenta;
 [Sourcetree](https://www.sourcetreeapp.com/) Interfaz gráfica para usar Git. Alternativa a GitHub Desktop
 
 ---
-#2025-03-20
-
 Si estamos modificando el nombre de un archivo, lo que va a pasar es que primero crea una copia de ese con el nombre deseado. Luego elimina el archivo antiguo.
 
 ![[visualizar deltas.svg]]
@@ -147,13 +128,8 @@ Si estamos modificando el nombre de un archivo, lo que va a pasar es que primero
 
 ---
 
-#2025-03-21
-
 ![[Drawing 2025-03-30 11.10.22.excalidraw]]
 ### Commit temporal
-
-
-
 ![[Drawing 2025-03-30 11.47.19.excalidraw|600]]
 
 ### Merge
@@ -163,12 +139,10 @@ Si estamos modificando el nombre de un archivo, lo que va a pasar es que primero
 Es una buena práctica poner un "resolución de conflicto *'Rama arrastrada'* ".
 
 ---
-#2025-03-24
 ### Etiquetas
 ![[Draw 25-03-24 11.57.27.excalidraw|500]]
 
 ---
-#2025-03-25
 [Gitflow Git Tutorial](https://www.atlassian.com/es/git/tutorials/comparing-workflows/gitflow-workflow) Trabajar con Git-Flow en lugar de GitHub
 ### Stash / Commit temporal
 El **Stash** está pensado como un pequeño bolsillo para dejar allí lo que no es tan urgente. Porque ahora mismo se nos ha pedido trabajar en otra cosa mucho más urgente. Sirve como bolsillo y taburete donde apoyamos aquello en lo que estábamos centrados, pero que debemos dejar en una pequeña pausa. *Lo ideal es no meter más de 2 cosas*.
@@ -201,8 +175,6 @@ NO hacer un **rebase** si ya se ha subido el repositorio a la nube. Ya que puede
 `git branch nueva-rama otra-rama` Crea la rama *nueva-rama* basada en *otra-rama*.
 
 ---
-#2025-03-26
-
 ![[Drawing 2025-03-26 09.16.25.excalidraw|600]]
 ## Funcionalidades del `rebase` interactivo
 
@@ -217,8 +189,6 @@ NO hacer un **rebase** si ya se ha subido el repositorio a la nube. Ya que puede
 | `break`     | Pausa el rebase en ese punto para realizar modificaciones manualmente. |
 
 ---
-
-#2025-03-27
 ### Rebase Interactivo
 `git rebase -i ` Rebase interactivo
 ![[Drawing 2025-03-27 10.44.55.excalidraw|500]]
