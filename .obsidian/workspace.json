@@ -78,7 +78,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 214.5
+    "width": 214.5,
+    "collapsed": true
   },
   "right": {
     "id": "87137d9fcc14686d",
@@ -173,8 +174,8 @@
   "active": "8724bc6eba0a7f3f",
   "lastOpenFiles": [
     "NOTES.md",
-    "Clase/S_14/03_Ju.md",
     "README.md",
+    "Clase/S_14/03_Ju.md",
     "Clase/S_14/31_Lu.md",
     "Clase/S_13/25_Ma.md",
     "Clase/S_13/27_Ju.md",
