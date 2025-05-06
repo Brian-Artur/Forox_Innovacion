@@ -57,8 +57,9 @@ Es una buena práctica el tener un Getter que actúe como valadador de los datos
 
 # Objetos tipados
 A la hora de tipar las funciones, debemos ser más específicos y decir qué parámetros va a tener y qué tipo de valor va a devolver. Colocar sólamente el tipo Function (constructor de funciones) no es aconsejable; ya que da demasiada libertad a TS.
-![[Drawing 2025-05-05 12.34.32.excalidraw]]
-Como programador debes estar consciente al 100% de los que haces
+![[Drawing 2025-05-05 12.34.32.excalidraw|300]]
+
+Como programador debes estar consciente al 100% de lo que haces
 
 Al ser Opcional la función, sabes que puede retornar UNDEFINED. Pero tú sabes que esta nunca lo hará.
 
@@ -80,13 +81,65 @@ Puedes utilizar indistintamente `;` o `,`.
 
 # Normalizaciones
 El kit está en asegurar que no haya datos duplicados. Que la BBDD ocupe lo mínimo y sea más rápida.
-![[Drawing 2025-05-05 14.37.05.excalidraw]]
+
 ## 1FN
 
 > Si vamos a sacar un certificado de Oracle debemos ssaber qué signifacan esas relaciones teoricas de `0:1` . Lo mismo pasa con las formas normales, que en la vida real solo se emplean hasta la 3ª forma normal. Pero si queremos ser expertos, sí que debemos conocer las 8 (la última no se sabe si está terminada).
 
 
+## Consistencia 
+La **consistencia de datos** significa que la información debe ser **válida y coherente** en todo momento.
+- **Datos inválidos**: Nada impide que exista una combinación como `id_nombre=99` (que no existe en la tabla `nombre`) en la tabla `id_persona`.
+- **Datos huérfanos**: Si borras "Marta" de `nombre`, las relaciones con `id_nombre=2` en `id_persona` quedan **sin referencia** (violando la **integridad referencial**).
+![[Drawing 2025-05-05 16.32.50.excalidraw|500]]
+## Complejidad innecesaria
+Para saber el nombre completo de una persona, necesitas hacer un **JOIN triple**:
+##  Pérdida de semántica
+- Los nombres y apellidos **no son entidades independientes**. No tiene sentido tratarlos como tablas separadas, porque:
+    - No se reutilizan tanto como para justificar la normalización.
+    - Un apellido "Blanco" no es el mismo concepto en "Lucía Blanco" y "Carlos Blanco".
 # Tareas
-- [ ] Buscar formas de hacer copia profunda.
-- [ ] Cómo hacemos que en un objeto, una función retorne algo por defecto; sin haberselo asignado.
-- [ ] Escribir las primeras 3FN
+- [x] Buscar formas de hacer copia profunda.
+- [x] Cómo hacemos que en un objeto, una función retorne algo por defecto; sin haberselo asignado.
+- [x] Escribir las primeras 3FN
+# Copia Profunda (Deep Copy) de Objetos Literales
+## Método Parse
+Tomamos el objeto original y lo pasamos, primero a `string`, y nuevamente a `objeto`. De esta forma "rompemos" su referencia.
+![[Drawing 2025-05-05 18.25.17.excalidraw|450]]
+### Limitaciones:
+- ❌ No copia funciones, `undefined`, `Symbol`, ni referencias circulares.
+- ❌ Convierte `Date` a strings (pierde el tipo original).
+## Librería `structuredClone()`
+![[Pasted image 20250505183515.png]]
+### Ventajas:
+- ✅ Maneja tipos complejos: `Date`, `Map`, `Set`, `RegExp`, etc.
+- ✅ Soporta referencias circulares.
+- ✅ Más eficiente que el método JSON.
+### Limitaciones:
+- ❌ No copia funciones o propiedades no enumerables.
+## Librería Lodash
+### `_.cloneDeep()`
+![[Drawing 2025-05-05 18.39.26.excalidraw]]
+### Ventajas:
+- ✅ Copia todos los tipos (incluyendo funciones y objetos personalizados).
+- ✅ Soporta referencias circulares.
+
+# Coalescencia nula
+![[Drawing 2025-05-05 19.12.45.excalidraw|450]]
+## Diferencia clave:
+- `||` devuelve el valor derecho si el izquierdo es _falsy_ (`undefined`, `null`, `""`, `0`, `false`).
+- `??` (Nullish coalescing) solo devuelve el derecho si el izquierdo es `null` o `undefined`. Permitiendo `""`, `0` y `false`, como valor.
+
+# Formas normales
+## 1FN
+- **Elimina grupos repetidos:** Asegura que cada celda en una tabla contenga un solo valor atómico, no conjuntos de datos repetidos. 
+- **Define claves primarias:** Cada tabla debe tener una clave primaria que identifique de forma única cada registro.
+- ![[Pasted image 20250505194137.png]]
+## 2FN
+- **Cumple con 1FN:** Debe estar en la primera forma normal. 
+- **Elimina dependencias parciales:** Todos los atributos no clave deben depender completamente de la clave primaria, no solo de parte de ella. 
+- ![[Pasted image 20250505194106.png]]
+## 3FN
+- **Cumple con 2FN:** Debe estar en la segunda forma normal. 
+- **Elimina dependencias transitivas:** No debe haber atributos no clave que dependan de otros atributos no clave.
+![[Pasted image 20250505194019.png]]
