@@ -1,10 +1,15 @@
+# Tutorial
+0. Clonar repositorio
+1. [Descargar Obsidian](https://obsidian.md/download)
+2. Abrir el repositorio desde Obsidian
+<img src="./assets/Captura_20250418_102927.jpg" alt="Paso 2" width="400">
+3. Aceptar plugins y configuración del autor
 # Registro de actividades
-## S.11
-### 14 Mar 2025
+## 14 Mar 2025
 1. Principios **SOLID**.
 2. Entender las necesidades de un proyecto software.
 3. Clean Code
-#### Git
+### Git
 1. Manejo de terminal
 2. Iniciar git
 3. Crear archivo con `nano`.
@@ -12,39 +17,38 @@
 5. Configurar email y nombre
 6. Confirmar cambio en el repositorio
 7. Volver a una versión anterior
-## S.12
-### 17 Mar 2025
+## 17 Mar 2025
 1. Factorizar vs Refactorizar.
-#### UF1843
+### UF1843
 1. Centrarse en el buen funcionamiento antes de adentrarse en la accesibilidad.
 2. Beneficios de la accesibilidad
 3. Definición de accesibilidad web
 4. Principios clave de la accesibilidad.
 5. Ventajas y dificultades
 6. Normativa y estándares sobre accesibilidad web
-#### Git
+### Git
 1. Uso de guiones con palabras clave.
 2. git --help
 3. Los 3 ámbitos de Git.
 4. Renombrar archivos y ramas
 5. Sacar archivos/carpetas del **"stage"**
-### 18 Mar 2025
-#### IA
+## 18 Mar 2025
+### IA
 1. Cómo utilizar la Inteligencia Artificial
 2. Empleo del diccionario de la RAE en la programación.
-#### JavaScript
+### JavaScript
 1. Web con diseños CSS inspiradores.
 2. Comunicación
 3. Constantes para ma máquina y para el programador.
 4. Prefijos descriptivos en nombres de variables.
-#### Git
+### Git
 1. Resetear el Stage area.
 2. Configuración para trabajar en equipo
 3. Control de commits
 4. Manejo de ramas
 5. Utilizar un editor de texto alternativo.
-### 19 Mar 2025
-#### Git
+## 19 Mar 2025
+### Git
 1. Ver el contenido de un archivo desde carpeta "padre", "hijo" y "abuelo".
 2. Crear rama y cambiarse a ella en un paso.
 3. Crear archivo en blanco desde consola.
@@ -52,36 +56,35 @@
 5. El mensaje de los "commits".
 6. El "README.md" como punto de partida del proyecto.
 7. Renombrar commit.
-#### UF1843
+### UF1843
 1. Interfaces y la experiencia del usuario
 2. Eficiencia y eficacia
 3. Lenguaje UML
 4. La importancia de la planificación
 5. Prototipado del producto
-### 20 Mar 2025
-#### UF1843
+## 20 Mar 2025
+### UF1843
 1. Frameworks CSS ligeros.
 2. Analizador de virus.
 3. Usabilidad.
 4. Diseño Centrado en el Usuario.
 5. Los 10 principios heurísticos de Jakob Nielsen
-#### JavaScript
+### JavaScript
 1. Douglas Crockford : creador del estándar JSON.
 2. No emplear "undefined"
-#### Git
+### Git
 1. Ciclo de modificación de archivos en Git.
 2. Git diff.
 3. Llevar un orden en los commits. 
 4. Llevar al repositorio local en un paso: `git commit -am "mensaje"`
 5. Regresar a un commit anterior
-### 21 Mar 2025
-#### Git
+## 21 Mar 2025
+### Git
 1. Empleo de una rama por cada versión.
 2. Renombrar desde la interfaz gráfica.
 3. Renombrar rama actual.
 4. Merge manual
-## S.13
-### 24 Mar 2025
+## 24 Mar 2025
 #### JavaScript
 1. Lenguaje multiparadigma
 2. Notación por punto y por corchete.
@@ -519,16 +522,3 @@
 
 
 
-# Tutorial
-
-## 0. Clonar repositorio
-
-## 1. Descargar Obsidian
-
-https://obsidian.md/download
-
-## 2. Abrir el repositorio
-
-![Paso 2](./assets/Captura_20250418_102927.jpg)
-
-### 3. Aceptar plugins y configuración del autor

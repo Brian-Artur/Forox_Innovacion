@@ -37,15 +37,18 @@
             "id": "4754566d292e9490",
             "type": "leaf",
             "state": {
-              "type": "excalidraw",
+              "type": "markdown",
               "state": {
-                "file": "Excalidraw/Drawing 2025-05-09 14.45.27.excalidraw.md"
+                "file": "README.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "excalidraw-icon",
-              "title": "Drawing 2025-05-09 14.45.27.excalidraw"
+              "icon": "lucide-file",
+              "title": "README"
             }
           }
-        ]
+        ],
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -68,7 +71,7 @@
                 "autoReveal": false
               },
               "icon": "lucide-folder-closed",
-              "title": "Files"
+              "title": "Explorador de archivos"
             }
           },
           {
@@ -184,34 +187,34 @@
   },
   "left-ribbon": {
     "hiddenItems": {
-      "switcher:Open quick switcher": false,
-      "graph:Open graph view": false,
-      "canvas:Create new canvas": false,
-      "daily-notes:Open today's daily note": false,
-      "templates:Insert template": false,
-      "command-palette:Open command palette": false,
+      "switcher:Abrir selector rápido": false,
+      "graph:Abrir vista gráfica": false,
+      "canvas:Crear nuevo lienzo": false,
+      "daily-notes:Abrir la nota de hoy": false,
+      "templates:Insertar plantilla": false,
+      "command-palette:Abrir paleta de comandos": false,
       "obsidian-excalidraw-plugin:New drawing": false,
       "handwritten-notes:Create empty handwritten note": true
     }
   },
-  "active": "8724bc6eba0a7f3f",
+  "active": "4754566d292e9490",
   "lastOpenFiles": [
+    "Clase/S_19/09_Vi.md",
+    "Clase/S_19/08_Ju.md",
+    "README.md",
+    "Excalidraw/Drawing 2025-05-09 14.45.27.excalidraw.md",
+    "Excalidraw/Drawing 2025-05-09 14.53.44.excalidraw.md",
     "assets/Pasted image 20250509150320.png",
     "assets/Pasted image 20250509150306.png",
-    "Excalidraw/Drawing 2025-05-09 14.53.44.excalidraw.md",
     "assets/Pasted Image 20250509145430_919.png",
     "assets/Pasted Image 20250509145348_565.png",
-    "Clase/S_19/09_Vi.md",
     "assets/Pasted image 20250509145332.png",
-    "Excalidraw/Drawing 2025-05-09 14.45.27.excalidraw.md",
     "assets/Pasted Image 20250509144619_558.png",
     "assets/Pasted Image 20250509144533_395.png",
     "Excalidraw/Drawing 2025-05-09 10.32.45.excalidraw.md",
     "assets/Pasted image 20250509143505.png",
-    "Clase/S_19/08_Ju.md",
     "assets/Pasted image 20250509141026.png",
     "assets/Pasted image 20250509140644.png",
-    "assets/Pasted image 20250509133355.png",
     "Clase/Etiquetas Semánticas.md",
     "Clase/JS.md",
     "Drawer/HTML & CSS.md",
