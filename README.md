@@ -5,7 +5,7 @@
 <img src="./assets/Captura_20250418_102927.jpg" alt="Paso 2" width="400">  
 3. Aceptar plugins y configuración del autor
 # Registro de actividades
-## [14 Mar 2025](Clase/S_11/17_Vi)
+## [14 Mar 2025](Clase/S_11/17_Vi)  
 1. Principios **SOLID**.
 2. Entender las necesidades de un proyecto software.
 3. Clean Code

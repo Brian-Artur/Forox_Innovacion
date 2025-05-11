@@ -39,12 +39,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "NOTES.md",
+                "file": "README.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "NOTES"
+              "title": "README"
             }
           }
         ],
@@ -199,6 +199,8 @@
   },
   "active": "4754566d292e9490",
   "lastOpenFiles": [
+    "Drawer/Git.md",
+    "NOTES.md",
     "TASKS.md",
     "README.md",
     "Clase/S_12/17_Lu.md",
@@ -233,8 +235,6 @@
     "Excalidraw/Drawing 2025-05-08 12.34.58.excalidraw.md",
     "Excalidraw/Drawing 2025-05-08 12.26.37.excalidraw.md",
     "Clase/S_19/07_Mi.md",
-    "Excalidraw/Drawing 2025-05-08 12.16.18.excalidraw.md",
-    "Excalidraw/Drawing 2025-05-08 10.39.36.excalidraw.md",
     "pdf/IFCD0210-MF0492_3-UF1844-Desarrollo-de-aplicaciones-web-en-el-entorno-servidor-Rafael-Luis-Granados-LaPaz_.pdf",
     "Clase/S_19",
     "pdf/Guía_rápida_UF1843_espanol.pdf",
