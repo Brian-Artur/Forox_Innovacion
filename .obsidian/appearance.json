@@ -2,5 +2,6 @@
   "cssTheme": "Things",
   "accentColor": "#cb5d8d",
   "theme": "moonstone",
-  "nativeMenus": false
+  "nativeMenus": false,
+  "baseFontSizeAction": true
 }

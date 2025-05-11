@@ -2,7 +2,7 @@
   "showLineNumber": true,
   "foldIndent": true,
   "showIndentGuide": true,
-  "strictLineBreaks": false,
+  "strictLineBreaks": true,
   "showInlineTitle": false,
   "alwaysUpdateLinks": true,
   "promptDelete": false,

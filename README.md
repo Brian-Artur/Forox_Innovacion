@@ -4,6 +4,7 @@
 2. Abrir el repositorio desde Obsidian
 <img src="./assets/Captura_20250418_102927.jpg" alt="Paso 2" width="400">
 3. Aceptar plugins y configuración del autor
+
 # Registro de actividades
 ## 14 Mar 2025
 1. Principios **SOLID**.
@@ -17,6 +18,7 @@
 5. Configurar email y nombre
 6. Confirmar cambio en el repositorio
 7. Volver a una versión anterior
+
 ## 17 Mar 2025
 1. Factorizar vs Refactorizar.
 ### UF1843
@@ -32,6 +34,7 @@
 3. Los 3 ámbitos de Git.
 4. Renombrar archivos y ramas
 5. Sacar archivos/carpetas del **"stage"**
+
 ## 18 Mar 2025
 ### IA
 1. Cómo utilizar la Inteligencia Artificial
@@ -47,6 +50,7 @@
 3. Control de commits
 4. Manejo de ramas
 5. Utilizar un editor de texto alternativo.
+
 ## 19 Mar 2025
 ### Git
 1. Ver el contenido de un archivo desde carpeta "padre", "hijo" y "abuelo".
@@ -204,12 +208,12 @@
 2. Izamiento
 3. Funciones con el operador `...rest`
 4. Forma de archivo .js
-### 4 Apr 2025
-#### BBDD
+## 4 Apr 2025
+### BBDD
 - Bases de datos noSQL 
-#### Python
+### Python
 - Guía de cómo escribir Python
-#### JavaScript
+### JavaScript
 1. Validador de nombres.
 2. *008-nombres-variables-y-palabras-reservadas/*
 	- Palabras reservadas del lenguaje.
@@ -222,8 +226,8 @@
 	1. Declaración de arrays.
 	2. Casting a array de distintos tipos de datos.
 	3. Matrices de 2 o más dimensiones.
-## S.15
-### 7 Apr 2025
+
+## 7 Apr 2025
 #### JavaScript
 1. *010-arreglos-2/*
 	1. Longitud del array.
